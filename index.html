@@ -50,6 +50,79 @@
     transition: color .2s;
   }
   .nav-links a:hover { color: var(--accent); }
+  #theme-toggle { align-self: center; margin-left: 16px; }
+  .theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 34px;
+    border-radius: 999px;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+    overflow: hidden;
+  }
+  .theme-toggle::before,
+  .theme-toggle::after {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    pointer-events: none;
+  }
+  .theme-toggle::before {
+    content: '☀️';
+    left: 10px;
+  }
+  .theme-toggle::after {
+    content: '🌙';
+    right: 10px;
+  }
+  .theme-toggle::after,
+  .theme-toggle::before {
+    opacity: 0.75;
+  }
+  .theme-toggle .theme-toggle-knob {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    box-shadow: 0 10px 20px rgba(15, 14, 12, 0.1);
+    left: 3px;
+    transition: transform .25s ease, background .2s, border-color .2s;
+  }
+  body.dark .theme-toggle {
+    background: #1d2a45;
+    border-color: #33415d;
+    color: var(--paper);
+  }
+  body.dark .theme-toggle .theme-toggle-knob {
+    transform: translateX(30px);
+    background: #11161f;
+    border-color: #283046;
+  }
+
+  body.dark {
+    --ink: #f5f5f1;
+    --paper: #11161f;
+    --accent: #ffc481;
+    --accent2: #75b4ff;
+    --muted: #a8afc3;
+    --rule: #283046;
+    --card: #161f2c;
+  }
+
+  #theme-toggle { align-self: center; margin-left: 16px; }
+  .hero-summary-column { background: rgba(255,255,255,0.92); }
+  body.dark .hero-summary-column { background: rgba(255,255,255,0.08); }
+  body.dark #hero { background: rgba(26, 34, 55, 0.96); }
 
   /* ── HERO ── */
   #hero {
@@ -244,10 +317,20 @@
   .exp-roles { display: flex; flex-direction: column; gap: 28px; }
   .exp-role {}
   .role-tag {
-    display: inline-block;
+    display: inline-flex; align-items: center; gap: 6px;
     font-family: var(--mono); font-size: .68rem; letter-spacing: .08em;
-    padding: 3px 10px; background: var(--ink); color: var(--paper);
+    padding: 5px 12px; background: var(--ink); color: var(--paper);
     margin-bottom: 10px;
+    border-radius: 999px;
+  }
+  .role-tag.role-ds2 {
+    background: #d9f0db;
+    color: #14522d;
+    font-weight: 500;
+  }
+  body.dark .role-tag.role-ds2 {
+    background: rgba(72, 117, 79, 0.28);
+    color: #d8f7d8;
   }
   .role-tag.analyst { background: var(--accent2); }
   .role-tag.intern { background: var(--muted); }
@@ -283,6 +366,13 @@
     transition: all .2s;
   }
   .skill-tag:hover { border-color: var(--accent); color: var(--paper); }
+  body.dark #skills { background: #12182a; color: var(--paper); }
+  body.dark #skills .section-title { color: var(--ink); }
+  body.dark #skills .section-rule { background: #33415d; }
+  body.dark .skills-grid { background: #1e293e; }
+  body.dark .skill-group { background: #161f2c; }
+  body.dark .skill-tag { border-color: #384c76; color: #c8d4f1; }
+  body.dark .skill-tag:hover { color: var(--paper); }
 
   /* ── EDUCATION ── */
   .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -386,6 +476,9 @@
     <a href="#education">Education</a>
     <a href="#certifications">Certifications</a>
   </div>
+  <button id="theme-toggle" type="button" class="theme-toggle" aria-label="Toggle theme">
+    <span class="theme-toggle-knob"></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -436,7 +529,7 @@
     </div>
     <div class="exp-roles">
       <div class="exp-role">
-        <div class="role-tag">Data Scientist II</div>
+        <div class="role-tag role-ds2">Data Scientist II</div>
         <div class="role-client">↳ Pharma Sector</div>
         <ul class="bullets">
           <li>Redesigned HCP targeting methodology using ML-based segmentation across <span class="highlight">35+ brand-indication combinations</span>, enabling precision engagement strategies and improving campaign ROI.</li>
@@ -588,28 +681,6 @@
       <div class="cert-icon aws">AWS</div>
       <div>
         <div class="cert-name">AWS Data Engineer Associate</div>
-
-<!-- Contact helper: try opening Gmail compose with recipient prefilled; fallback to mailto -->
-<script>
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a.open-gmail');
-    if (!a) return;
-    e.preventDefault();
-    var href = a.getAttribute('href') || '';
-    var mailto = href && href.indexOf('mailto:') === 0 ? href : 'mailto:' + (a.datasetEmail || '');
-    var toMatch = mailto.match(/^mailto:([^?]+)/i);
-    var to = (toMatch && toMatch[1]) || a.datasetEmail || '';
-    var subject = a.dataset.subject || '';
-    var body = a.dataset.body || '';
-    var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to);
-    if (subject) gmailUrl += '&su=' + encodeURIComponent(subject);
-    if (body) gmailUrl += '&body=' + encodeURIComponent(body);
-    var newWin = window.open(gmailUrl, '_blank');
-    if (!newWin) {
-      window.location.href = mailto;
-    }
-  });
-</script>
         <div class="cert-issuer">Amazon Web Services &nbsp;·&nbsp; DEA-C01</div>
       </div>
       <a class="cert-link" href="https://www.credly.com/badges/a3cfa3a7-e6cb-4247-abfd-ee55998e0909/linked_in_profile" target="_blank">View ↗</a>
@@ -630,6 +701,52 @@
   <div class="footer-copy">© 2026 Himanshu Banerjee &nbsp;·&nbsp; Bengaluru, India</div>
   <a href="#hero" class="footer-back">↑ Back to top</a>
 </footer>
+
+<script>
+  (function () {
+    var storedTheme = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var darkMode = storedTheme ? storedTheme === 'dark' : prefersDark;
+    if (darkMode) {
+      document.body.classList.add('dark');
+    }
+
+    var toggle = document.getElementById('theme-toggle');
+    function updateToggleLabel() {
+      if (!toggle) return;
+      var isDark = document.body.classList.contains('dark');
+      toggle.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+    updateToggleLabel();
+
+    if (toggle) {
+      toggle.addEventListener('click', function () {
+        var isDark = document.body.classList.toggle('dark');
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        updateToggleLabel();
+      });
+    }
+
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a.open-gmail');
+      if (!a) return;
+      e.preventDefault();
+      var href = a.getAttribute('href') || '';
+      var mailto = href && href.indexOf('mailto:') === 0 ? href : 'mailto:' + (a.datasetEmail || '');
+      var toMatch = mailto.match(/^mailto:([^?]+)/i);
+      var to = (toMatch && toMatch[1]) || a.datasetEmail || '';
+      var subject = a.dataset.subject || '';
+      var body = a.dataset.body || '';
+      var gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to);
+      if (subject) gmailUrl += '&su=' + encodeURIComponent(subject);
+      if (body) gmailUrl += '&body=' + encodeURIComponent(body);
+      var newWin = window.open(gmailUrl, '_blank');
+      if (!newWin) {
+        window.location.href = mailto;
+      }
+    });
+  })();
+</script>
 
 </body>
 </html>
